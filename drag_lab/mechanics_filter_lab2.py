@@ -1,20 +1,31 @@
 # Mechanics filter lab part 2 : Alex P. and Feodor
 
 import matplotlib.pyplot as plt
-import pandas as pd 
+import pandas as pd
+import numpy as np
+ 
 
 #Part 1: Extracting data from programming assignment
 
+terminal_velocities_lst = [-0.7552631578947369,
+ -0.6763157894736844,
+ -0.6402255639097749,
+ -0.7315789473684213,
+ -0.7131578947368422,
+ -0.6887218045112791,
+ -0.7244360902255631,
+ -0.7661654135338344,
+ -0.7240601503759397,
+ -0.6492481203007521] #all terminal velocities recorded for single filter experiment
 experiment_data  = [1.05, 1.04, 1.04, 1.03, 1.02, 1.01, 0.99, 0.97, 0.95, 0.93, 0.9, 0.87, 0.85, 0.81, 0.78, 0.75, 0.71, 0.67, 0.63, 0.59, 0.55, 0.5, 0.45, 0.41, 0.36] 
-# All the positions recorded during the actual experiment
+# All the positions recorded during the actual experiment (for 3 coffee filters)
 experiment_data = [round(elem-0.36,2) for elem in experiment_data] #Since the data reaches "bottom" at 0.36, shift all values by this.
 y = experiment_data[0] #setting initial y (to be used later), to match with initial y of experiemnt 
-avg_terminal_velocity = -1.71954887 
-#coefficient obtained from programming assigment at 3 filters using ployfit function
+avg_terminal_velocity = sum(terminal_velocities_lst)/len(terminal_velocities_lst)
 
-# TODO: Drag coefficient constant, for drop with 3 filters
+#Part 2: Drag coefficient constant, calculated using results from 1 filter drops
 
-m = 2.6/1000 # Mass measured in class, divided by 1000 to attain mass in kg (was in g)
+m = 8.7/1000/10 # Mass of 10 filters, to reduce uncertainty (diving by 10 to calculate mass for a single filter)
 g = 9.8
 p = 1.204 #at 20 degrees celsius
 A = 0.0162733 #suface area of our filter
@@ -35,6 +46,12 @@ Which for our air density of 1.204 gives us a range from 1.202 to 1.206
 Since in the drag equation, mass is in the numerator and air density is
 in the denominator. The highest possible value of C can be calculated
 when mass is the largest and air density is the lowest
+
+uncertainties:
+m = +/- 0.1g
+g = 
+p = +/- 0.004 kg/m^3 (for temp 23 +- 1 deg)
+v = find 
 '''
 m = 2.65/1000 # highest range for mass
 g = 9.8
@@ -75,6 +92,28 @@ def eulersMethod(m,A,p,C,t,y):
         data['time(s)'] += [data['time(s)'][-1] + t]
 
     return data
+
+def eulers_method(y, v, c, p, A, mass, arr, acceleration, t):
+    v += acceleration * t
+    y += v * t
+    acceleration = -9.8 + (c * p * A * v**2) / (2 * mass)
+    arr = np.append(arr, y)
+    return v, y, acceleration, arr
+
+# Constants
+t = 0.02
+y = 1
+v = 0
+acceleration = -9.8
+c = 0.5
+p = 1.22
+A = 150 / 10000  # Convert cm² to m²
+mass = 0.003
+arr = np.array([])
+
+# Euler's Method Iteration
+while y > 0:
+    v, y, acceleration, arr = eulers_method(y, v, c, p, A, mass, arr, acceleration, t)
 
 t = 0.02 #since original experiment was measure in 0.02 second intervals
 data = eulersMethod(m,A,p,C,t,y)
