@@ -30,7 +30,8 @@ g = 9.8
 p = 1.204 #at 20 degrees celsius
 A = 0.0162733 #suface area of our filter
 v = avg_terminal_velocity
-C = (2*m*g)/(p*A*(v**2)) #Drag equation, found in lab sheet
+# C = (2*m*g)/(p*A*(v**2)) #Drag equation, found in lab sheet
+C = 1.7415501881238382
 print(C)
 
 '''
@@ -53,15 +54,15 @@ g =
 p = +/- 0.004 kg/m^3 (for temp 23 +- 1 deg)
 v = find 
 '''
-m = 2.65/1000 # highest range for mass
-g = 9.8
-p = 1.202 #lowest range for air density
-A = 0.0162733
-v = avg_terminal_velocity
-max_C = (2*m*g)/(p*A*(v**2))
+# m = 2.65/1000 # highest range for mass
+# g = 9.8
+# p = 1.202 #lowest range for air density
+# A = 0.0162733
+# v = avg_terminal_velocity
+# max_C = (2*m*g)/(p*A*(v**2))
 
-uncertainty = C - max_C
-print(uncertainty) # Final uncertainty (for both +/-)
+# uncertainty = C - max_C
+# print(uncertainty) # Final uncertainty (for both +/-)
 
 
 '''
@@ -93,27 +94,27 @@ def eulersMethod(m,A,p,C,t,y):
 
     return data
 
-def eulers_method(y, v, c, p, A, mass, arr, acceleration, t):
-    v += acceleration * t
-    y += v * t
-    acceleration = -9.8 + (c * p * A * v**2) / (2 * mass)
-    arr = np.append(arr, y)
-    return v, y, acceleration, arr
+# def eulers_method(y, v, c, p, A, mass, arr, acceleration, t):
+#     v += acceleration * t
+#     y += v * t
+#     acceleration = -9.8 + (c * p * A * v**2) / (2 * mass)
+#     arr = np.append(arr, y)
+#     return v, y, acceleration, arr
 
-# Constants
-t = 0.02
-y = 1
-v = 0
-acceleration = -9.8
-c = 0.5
-p = 1.22
-A = 150 / 10000  # Convert cm² to m²
-mass = 0.003
-arr = np.array([])
+# # Constants
+# t = 0.02
+# y = 1
+# v = 0
+# acceleration = -9.8
+# c = 0.5
+# p = 1.22
+# A = 150 / 10000  # Convert cm² to m²
+# mass = 0.003
+# arr = np.array([])
 
-# Euler's Method Iteration
-while y > 0:
-    v, y, acceleration, arr = eulers_method(y, v, c, p, A, mass, arr, acceleration, t)
+# # Euler's Method Iteration
+# while y > 0:
+#     v, y, acceleration, arr = eulers_method(y, v, c, p, A, mass, arr, acceleration, t)
 
 t = 0.02 #since original experiment was measure in 0.02 second intervals
 data = eulersMethod(m,A,p,C,t,y)
